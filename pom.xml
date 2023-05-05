@@ -81,7 +81,7 @@
         <version.junit>5.9.1</version.junit>
         <version.logback>1.4.7</version.logback>
         <version.selenium>4.2.2</version.selenium>
-        <version.slf4j>2.0.3</version.slf4j>
+        <version.slf4j>2.0.7</version.slf4j>
         <version.testcontainers>1.18.0</version.testcontainers>
         <version.wildfly.core>20.0.1.Final</version.wildfly.core>
 
