@@ -87,7 +87,7 @@
         <version.selenium>4.34.0</version.selenium>
         <version.slf4j>2.0.12</version.slf4j>
         <version.smallrye.common>2.14.0</version.smallrye.common>
-        <version.testcontainers>1.21.3</version.testcontainers>
+        <version.testcontainers>1.21.4</version.testcontainers>
         <version.wildfly.core>30.0.0.Final</version.wildfly.core>
 
         <!-- Plugin versions -->
