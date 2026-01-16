@@ -88,7 +88,7 @@
         <version.slf4j>2.0.12</version.slf4j>
         <version.smallrye.common>2.15.0</version.smallrye.common>
         <version.testcontainers>1.21.3</version.testcontainers>
-        <version.wildfly.core>31.0.0.Final</version.wildfly.core>
+        <version.wildfly.core>31.0.1.Final</version.wildfly.core>
 
         <!-- Plugin versions -->
         <version.checkstyle.plugin>3.1.1</version.checkstyle.plugin>
