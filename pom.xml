@@ -77,7 +77,7 @@
         <version.commons.text>1.15.0</version.commons.text>
         <version.creaper>2.0.3</version.creaper>
         <version.gwtp>1.6</version.gwtp>
-        <version.hal>3.6.12.Final</version.hal>
+        <version.hal>3.7.17.Final</version.hal>
         <version.jboss.dmr>1.7.0.Final</version.jboss.dmr>
         <version.jboss.logmanager>3.2.0.Final</version.jboss.logmanager>
         <version.jgrapht>1.5.2</version.jgrapht>
