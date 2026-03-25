@@ -122,7 +122,8 @@ public class ResourceVerifier {
     public ResourceVerifier verifyAttribute(String attributeName, ModelNode expectedValue, String errorMessageSuffix)
             throws Exception {
         ModelNode attributeValue = readAttribute(attributeName, errorMessageSuffix);
-        assertEquals(expectedValue, attributeValue, "Attribute value is different in model! " + errorMessageSuffix);
+        ModelNode normalizedExpected = normalizeNumericType(expectedValue, attributeValue);
+        assertEquals(normalizedExpected, attributeValue, "Attribute value is different in model! " + errorMessageSuffix);
         return this;
     }
 
@@ -679,6 +680,15 @@ public class ResourceVerifier {
             log.debug("Not yet propagated therefore waiting.");
             Library.letsSleep(100);
         }
+    }
+
+    private ModelNode normalizeNumericType(ModelNode expected, ModelNode actual) {
+        ModelType expectedType = expected.getType();
+        ModelType actualType = actual.getType();
+        if (expectedType == ModelType.INT && actualType == ModelType.LONG) {
+            return new ModelNode(expected.asLong());
+        }
+        return expected;
     }
 
     @FunctionalInterface
