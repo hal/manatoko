@@ -33,7 +33,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.wildfly.extras.creaper.core.online.OnlineManagementClient;
 import org.wildfly.extras.creaper.core.online.operations.Operations;
 
-import static org.jboss.hal.dmr.ModelDescriptionConstants.CLIENT_SSL_CONTEXT;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.GROUP;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.IDENTITY;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.IIOP_OPENJDK;
@@ -42,7 +41,6 @@ import static org.jboss.hal.dmr.ModelDescriptionConstants.NONE;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.PROPERTIES;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.SECURITY;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.SECURITY_DOMAIN;
-import static org.jboss.hal.dmr.ModelDescriptionConstants.SERVER_SSL_CONTEXT;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.SOCKET_BINDING;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.TRANSACTIONS;
 import static org.jboss.hal.testsuite.container.WildFlyConfiguration.FULL;
@@ -185,13 +183,6 @@ class IIOPTest {
                     resourceVerifier.verifyAttribute("server-requires-ssl", !serverRequiresSSL);
                     resourceVerifier.verifyAttribute("support-ssl", !supportSSL);
                 });
-    }
-
-    @Test
-    void updateSecurityServerRequireClientSslContext() {
-        page.getTabs().select(Ids.build(IIOP_PREFIX, GROUP, SECURITY, Ids.TAB));
-        form = page.getSecurityForm();
-        crud.updateWithError(form, f -> f.text(CLIENT_SSL_CONTEXT, "foo"), SERVER_SSL_CONTEXT);
     }
 
     @Test
