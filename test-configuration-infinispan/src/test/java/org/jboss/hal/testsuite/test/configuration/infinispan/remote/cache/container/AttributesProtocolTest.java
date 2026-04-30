@@ -17,6 +17,7 @@ package org.jboss.hal.testsuite.test.configuration.infinispan.remote.cache.conta
 
 import org.jboss.arquillian.core.api.annotation.Inject;
 import org.jboss.arquillian.graphene.page.Page;
+import org.jboss.dmr.ModelNode;
 import org.jboss.hal.testsuite.Console;
 import org.jboss.hal.testsuite.CrudOperations;
 import org.jboss.hal.testsuite.Random;
@@ -30,6 +31,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.wildfly.extras.creaper.core.online.ModelNodeResult;
 import org.wildfly.extras.creaper.core.online.OnlineManagementClient;
 import org.wildfly.extras.creaper.core.online.operations.Operations;
 import org.wildfly.extras.creaper.core.online.operations.Values;
@@ -83,9 +85,13 @@ class AttributesProtocolTest {
     void editProtocolVersion() throws Exception {
         // If this was tested in AttributesTest, the test would fail
         // Don't know why - so this has its own unit test
-        String[] protocolVersions = { "2.0", "2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "3.0",
-                "3.1", "4.0" };
-        String protocolVersion = protocolVersions[Random.number(0, protocolVersions.length)];
+        ModelNodeResult result = operations.invoke("read-resource-description",
+                remoteCacheContainerAddress(REMOTE_CACHE_CONTAINER_TO_BE_TESTED));
+        ModelNode protocolVersionAttribute = result.get("result").get("attributes").get("protocol-version");
+        String defaultProtocolVersion = protocolVersionAttribute.get("default").asString();
+        String[] allowedProtocolVersions = protocolVersionAttribute.get("allowed").asList().stream().map(ModelNode::asString)
+                .filter(version -> !defaultProtocolVersion.equals(version)).toArray(String[]::new);
+        String protocolVersion = allowedProtocolVersions[Random.number(0, allowedProtocolVersions.length)];
         crudOperations.update(remoteCacheContainerAddress(REMOTE_CACHE_CONTAINER_TO_BE_TESTED), form,
                 formFragment -> formFragment.select("protocol-version", protocolVersion),
                 resourceVerifier -> resourceVerifier.verifyAttribute("protocol-version", protocolVersion));
