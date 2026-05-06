@@ -38,6 +38,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.wildfly.extras.creaper.core.online.OnlineManagementClient;
 import org.wildfly.extras.creaper.core.online.operations.Operations;
+import org.wildfly.extras.creaper.core.online.operations.Values;
 
 import static org.jboss.hal.testsuite.container.WildFlyConfiguration.FULL_HA;
 import static org.jboss.hal.testsuite.fixtures.InfinispanFixtures.backupAddress;
@@ -66,7 +67,7 @@ class BackupsTest {
         operations.add(cacheContainerAddress(CACHE_CONTAINER).and("transport", "jgroups"));
         operations.add(scatteredCacheAddress(CACHE_CONTAINER, SCATTERED_CACHE));
         operations.add(backupAddress(CACHE_CONTAINER, SCATTERED_CACHE, BACKUP_DELETE));
-        operations.add(backupAddress(CACHE_CONTAINER, SCATTERED_CACHE, BACKUP_EDIT));
+        operations.add(backupAddress(CACHE_CONTAINER, SCATTERED_CACHE, BACKUP_EDIT), Values.of("strategy", "SYNC"));
     }
 
     @Inject Console console;
@@ -124,12 +125,7 @@ class BackupsTest {
 
     @Test
     void editStrategy() throws Exception {
-        String currentStrategy = operations
-                .readAttribute(backupAddress(CACHE_CONTAINER, SCATTERED_CACHE, BACKUP_EDIT), "strategy")
-                .stringValue();
-        List<String> strategies = new ArrayList<>(Arrays.asList("SYNC", "ASYNC"));
-        strategies.remove(currentStrategy);
-        String strategy = strategies.get(0);
+        String strategy = "ASYNC";
         table.select(BACKUP_EDIT);
         console.waitNoNotification();
         crudOperations.update(backupAddress(CACHE_CONTAINER, SCATTERED_CACHE, BACKUP_EDIT), form,

@@ -47,7 +47,7 @@ class AttributesTest {
     @BeforeAll
     static void setupModel() throws Exception {
         StoreSetup.setup(wildFly, operations -> operations.headers(Values.of("allow-resource-service-restart", true))
-                .add(customStoreAddress(CC_CREATE, SC_CREATE), Values.of("class", Random.name())));
+                .add(customStoreAddress(CC_CREATE, SC_CREATE), Values.of("class", Random.name())).assertSuccess());
     }
 
     @Inject Console console;

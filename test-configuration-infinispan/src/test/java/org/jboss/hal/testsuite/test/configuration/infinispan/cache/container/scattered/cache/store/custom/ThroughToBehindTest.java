@@ -47,8 +47,8 @@ class ThroughToBehindTest extends AbstractThroughToBehindTest {
     static void setupModel() throws Exception {
         StoreSetup.setup(wildFly, operations -> {
             operations.headers(Values.of(ALLOW_RESOURCE_SERVICE_RESTART, true))
-                    .add(customStoreAddress(CC_CREATE, SC_CREATE), Values.of(CLASS, Random.name()));
-            operations.add(customStoreAddress(CC_CREATE, SC_CREATE).and(WRITE, BEHIND));
+                    .add(customStoreAddress(CC_CREATE, SC_CREATE), Values.of(CLASS, Random.name())).assertSuccess();
+            operations.add(customStoreAddress(CC_CREATE, SC_CREATE).and(WRITE, BEHIND)).assertSuccess();
         });
     }
 
