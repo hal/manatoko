@@ -41,6 +41,7 @@ public final class InfinispanFixtures {
     public static final String LOCAL_CACHE_ITEM = "local-cache-item";
     public static final String MAX_BATCH_SIZE = "max-batch-size";
     public static final String MAX_IDLE = "max-idle";
+    public static final String CUSTOM_STORE_CLASS = "org.infinispan.configuration.cache.CustomStoreConfigurationBuilder";
     public static final String WRITE = "write";
     public static final String BEHIND = "behind";
     public static final String THROUGH = "through";

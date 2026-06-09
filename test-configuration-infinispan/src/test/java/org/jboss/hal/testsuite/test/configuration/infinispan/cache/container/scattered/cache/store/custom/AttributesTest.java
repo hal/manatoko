@@ -35,6 +35,7 @@ import org.wildfly.extras.creaper.core.online.operations.Values;
 
 import static org.jboss.hal.testsuite.container.WildFlyConfiguration.FULL_HA;
 import static org.jboss.hal.testsuite.fixtures.InfinispanFixtures.CC_CREATE;
+import static org.jboss.hal.testsuite.fixtures.InfinispanFixtures.CUSTOM_STORE_CLASS;
 import static org.jboss.hal.testsuite.fixtures.InfinispanFixtures.SC_CREATE;
 import static org.jboss.hal.testsuite.fixtures.InfinispanFixtures.customStoreAddress;
 
@@ -47,7 +48,7 @@ class AttributesTest {
     @BeforeAll
     static void setupModel() throws Exception {
         StoreSetup.setup(wildFly, operations -> operations.headers(Values.of("allow-resource-service-restart", true))
-                .add(customStoreAddress(CC_CREATE, SC_CREATE), Values.of("class", Random.name())).assertSuccess());
+                .add(customStoreAddress(CC_CREATE, SC_CREATE), Values.of("class", CUSTOM_STORE_CLASS)).assertSuccess());
     }
 
     @Inject Console console;

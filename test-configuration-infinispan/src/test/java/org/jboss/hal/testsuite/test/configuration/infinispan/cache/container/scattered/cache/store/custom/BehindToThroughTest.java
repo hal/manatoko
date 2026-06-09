@@ -15,7 +15,6 @@
  */
 package org.jboss.hal.testsuite.test.configuration.infinispan.cache.container.scattered.cache.store.custom;
 
-import org.jboss.hal.testsuite.Random;
 import org.jboss.hal.testsuite.container.WildFlyContainer;
 import org.jboss.hal.testsuite.page.configuration.ScatteredCachePage;
 import org.jboss.hal.testsuite.test.Manatoko;
@@ -32,6 +31,7 @@ import static org.jboss.hal.dmr.ModelDescriptionConstants.ALLOW_RESOURCE_SERVICE
 import static org.jboss.hal.dmr.ModelDescriptionConstants.CLASS;
 import static org.jboss.hal.testsuite.container.WildFlyConfiguration.FULL_HA;
 import static org.jboss.hal.testsuite.fixtures.InfinispanFixtures.CC_CREATE;
+import static org.jboss.hal.testsuite.fixtures.InfinispanFixtures.CUSTOM_STORE_CLASS;
 import static org.jboss.hal.testsuite.fixtures.InfinispanFixtures.SC_CREATE;
 import static org.jboss.hal.testsuite.fixtures.InfinispanFixtures.THROUGH;
 import static org.jboss.hal.testsuite.fixtures.InfinispanFixtures.WRITE;
@@ -47,7 +47,7 @@ class BehindToThroughTest extends AbstractBehindToThroughTest {
     static void setupModel() throws Exception {
         StoreSetup.setup(wildFly, operations -> {
             operations.headers(Values.of(ALLOW_RESOURCE_SERVICE_RESTART, true))
-                    .add(customStoreAddress(CC_CREATE, SC_CREATE), Values.of(CLASS, Random.name())).assertSuccess();
+                    .add(customStoreAddress(CC_CREATE, SC_CREATE), Values.of(CLASS, CUSTOM_STORE_CLASS)).assertSuccess();
             operations.add(customStoreAddress(CC_CREATE, SC_CREATE).and(WRITE, THROUGH)).assertSuccess();
         });
     }
