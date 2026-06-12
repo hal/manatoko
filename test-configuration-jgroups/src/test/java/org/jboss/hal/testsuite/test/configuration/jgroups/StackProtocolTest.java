@@ -24,6 +24,7 @@ import org.jboss.hal.testsuite.Random;
 import org.jboss.hal.testsuite.container.WildFlyContainer;
 import org.jboss.hal.testsuite.fragment.FormFragment;
 import org.jboss.hal.testsuite.fragment.TableFragment;
+import org.jboss.hal.testsuite.fragment.WizardFragment;
 import org.jboss.hal.testsuite.page.configuration.JGroupsPage;
 import org.jboss.hal.testsuite.test.Manatoko;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,6 +32,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.openqa.selenium.By;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.wildfly.extras.creaper.core.online.OnlineManagementClient;
@@ -39,6 +41,7 @@ import org.wildfly.extras.creaper.core.online.operations.Operations;
 import org.wildfly.extras.creaper.core.online.operations.Values;
 
 import static org.jboss.arquillian.graphene.Graphene.waitGui;
+import static org.jboss.hal.dmr.ModelDescriptionConstants.NAME;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.PROPERTIES;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.SOCKET_BINDING;
 import static org.jboss.hal.testsuite.container.WildFlyConfiguration.HA;
@@ -56,6 +59,9 @@ import static org.jboss.hal.testsuite.fixtures.JGroupsFixtures.transportAddress;
 @Testcontainers
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class StackProtocolTest {
+
+    private static final String CUSTOM_PROTOCOL_SELECTOR = "input[type=radio]#protocol-custom";
+    private static final String PROTOCOL_ADD_FORM_ID = "protocol-add-form";
 
     @Container static WildFlyContainer wildFly = WildFlyContainer.standalone(HA);
 
@@ -95,7 +101,13 @@ public class StackProtocolTest {
     void create() throws Exception {
         stackTable.action(STACK_CREATE, Names.PROTOCOL);
         waitGui().until().element(protocolTable.getRoot()).is().visible();
-        crud.create(protocolAddress(STACK_CREATE, PROTOCOL_CREATE), protocolTable, PROTOCOL_CREATE);
+        protocolTable.button("Add").click();
+        WizardFragment wizard = console.wizard();
+        wizard.getRoot().findElement(By.cssSelector(CUSTOM_PROTOCOL_SELECTOR)).click();
+        wizard.next(PROTOCOL_ADD_FORM_ID);
+        FormFragment namesForms = wizard.getForm(PROTOCOL_ADD_FORM_ID);
+        namesForms.text(NAME, PROTOCOL_CREATE);
+        wizard.next();
     }
 
     @Test()
