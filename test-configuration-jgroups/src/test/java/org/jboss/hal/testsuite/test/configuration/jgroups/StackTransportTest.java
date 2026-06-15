@@ -30,7 +30,6 @@ import org.jboss.hal.testsuite.page.configuration.JGroupsPage;
 import org.jboss.hal.testsuite.test.Manatoko;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -41,7 +40,6 @@ import org.wildfly.extras.creaper.core.online.operations.Batch;
 import org.wildfly.extras.creaper.core.online.operations.Operations;
 import org.wildfly.extras.creaper.core.online.operations.Values;
 
-import static java.util.Arrays.asList;
 import static org.jboss.arquillian.graphene.Graphene.waitGui;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.DEFAULT;
 import static org.jboss.hal.dmr.ModelDescriptionConstants.MAX_THREADS;
@@ -58,7 +56,6 @@ import static org.jboss.hal.testsuite.fixtures.JGroupsFixtures.transportThreadPo
 @Manatoko
 @Testcontainers
 @TestMethodOrder(MethodOrderer.MethodName.class)
-@Disabled // TODO Fix failing tests
 class StackTransportTest {
 
     @Container static WildFlyContainer wildFly = WildFlyContainer.standalone(HA);
@@ -77,7 +74,6 @@ class StackTransportTest {
     @Inject CrudOperations crud;
     @Inject Console console;
     TableFragment stackTable;
-    TableFragment transportTable;
     FormFragment transportAttributesForm;
     FormFragment transportTPDefaultForm;
     TabsFragment threadPoolTab;
@@ -89,27 +85,21 @@ class StackTransportTest {
 
         threadPoolTab = page.getTransportThreadPoolTab();
         stackTable = page.getStackTable();
-        transportTable = page.getTransportTable();
         transportAttributesForm = page.getTransportAttributesForm();
         transportTPDefaultForm = page.getTransportThreadPoolDefaultForm();
-        transportTable.bind(asList(transportAttributesForm, transportTPDefaultForm));
     }
 
     @Test()
     void updateAttributes() throws Exception {
         stackTable.action(STACK_CREATE, Names.TRANSPORT);
-        waitGui().until().element(transportTable.getRoot()).is().visible();
-
-        transportTable.select(TRANSPORT_CREATE);
+        waitGui().until().element(transportAttributesForm.getRoot()).is().visible();
         crud.update(transportAddress(STACK_CREATE, TRANSPORT_CREATE), transportAttributesForm, SITE, Random.name());
     }
 
     @Test()
     void threadPoolDefaultEdit() throws Exception {
         stackTable.action(STACK_CREATE, Names.TRANSPORT);
-        waitGui().until().element(transportTable.getRoot()).is().visible();
-
-        transportTable.select(TRANSPORT_CREATE);
+        waitGui().until().element(transportAttributesForm.getRoot()).is().visible();
         threadPoolTab.select(Ids.build(Ids.JGROUPS_TRANSPORT_THREADPOOL_DEFAULT_TAB));
         crud.update(transportThreadPoolAddress(STACK_CREATE, TRANSPORT_CREATE, DEFAULT), transportTPDefaultForm,
                 MAX_THREADS, 123);
@@ -118,9 +108,7 @@ class StackTransportTest {
     @Test()
     void threadPoolDefaultReset() throws Exception {
         stackTable.action(STACK_CREATE, Names.TRANSPORT);
-        waitGui().until().element(transportTable.getRoot()).is().visible();
-
-        transportTable.select(TRANSPORT_CREATE);
+        waitGui().until().element(transportAttributesForm.getRoot()).is().visible();
         threadPoolTab.select(Ids.build(Ids.JGROUPS_TRANSPORT_THREADPOOL_DEFAULT_TAB));
         crud.reset(transportThreadPoolAddress(STACK_CREATE, TRANSPORT_CREATE, DEFAULT), transportTPDefaultForm);
     }
